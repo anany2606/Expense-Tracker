@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+</head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<audio id="clickSound" preload="auto">
+    <source src="static/click.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="deleteSound" preload="auto">
+    <source src="static/swoosh.mp3" type="audio/mpeg">
+</audio>
+<audio id="welcomeSound" preload="auto">
+    <source src="static/welcome.mp3" type="audio/mpeg">
+</audio>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<body>
+
+<div class="container">
+    <a href="/logout" class="logout">Logout 🙋🏻‍♀️</a>
+
+    <h1>💰 Expense Tracker</h1>
+
+    <h2 class="welcome">Welcome {{ username }}👋</h2>
+
+
+    <form method="POST" id="expenseForm">
+        <input type="text" name="name" placeholder="Remarks" required>
+        <input type="number" name="amount" placeholder="₹ Amount" required>
+        <select name="category" id="categorySelect" required>
+            <option value="">Select Category</option>
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Shopping</option>
+            <option>Entertainment</option>
+            <option>Vehicles</option>
+            <option>Bills</option>
+            <option>Other</option>
+        </select>
+    </form>
+    <button type="button" onclick="handleSubmit(event)">Add</button>
+
+    
+    <div class="filters">
+        <h3>
+            🎯 SORT
+        </h3>
+        <div class="filtercard">
+            <input type="text" id="searchBox" placeholder="🔍 Search...">
+            <select id="filterCategory">
+                <option value="">All</option>
+                <option>Food</option>
+                <option>Travel</option>
+                <option>Shopping</option>
+                <option>Entertainment</option>
+                <option>Vehicles</option>
+                <option>Bills</option>
+                <option>Other</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="total">
+        Total: ₹{{ total }}
+    </div>
+    <ul>
+        
+        {% for expense in expenses %}
+        <li class="card {{ expense[3]|lower }}" data-category="{{ expense[3] }}">
+            <div class="top">
+                <span class="icon">
+                    {% if expense[3] == "Food" %} Food🍔
+                    {% elif expense[3] == "Travel" %} Travel✈️
+                    {% elif expense[3] == "Shopping" %} Shopping🛍️
+                    {% elif expense[3] == "Entertainment" %} Entertainment🎬
+                    {% elif expense[3] == "Vehicles" %} Vehicles🚗
+                    {% elif expense[3] == "Bills" %} Bills💡
+                    {% elif expense[3] == "Other" %} Other💡
+                    {% else %} 💸
+                    {% endif %}
+                </span>
+
+            </div>
+            
+            <strong>{{ expense[1] }}</strong>
+            <span class="amount">₹{{ expense[2] }}</span>
+            <small>{{ expense[4] }}</small>
+            <a href="/delete/{{ expense[0] }}" onclick="playDelete(event, this)">❌</a>
+        </li>
+        {% endfor %}
+        
+    </ul>
+    
+    
+    <div class="chart">
+        <h3>📊 Expense Breakdown</h3>
+        <canvas id="expenseChart"></canvas>
+    </div>
+    
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+<script>
+
+// ✅ Click Sound
+function playClick() {
+    const sound = document.getElementById("clickSound");
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+    }
+}
+
+// ✅ Delete Sound
+function playDelete(event, element) {
+    event.preventDefault();
+
+    if (!confirm("Delete this expense?")) return; // ✅ added
+
+    const sound = document.getElementById("deleteSound");
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+    }
+
+    setTimeout(() => {
+        window.location.href = element.href;
+    }, 300);
+}
+
+// ✅ Welcome Sound
+function playWelcome() {
+    const sound = document.getElementById("welcomeSound");
+    if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+    }
+}
+
+// ✅ Welcome trigger (safe)
+window.onload = function() {
+    try {
+        const playSound = JSON.parse('{{ play_sound | tojson | safe }}');
+        
+        if (playSound) {
+            setTimeout(() => {
+                playWelcome();
+            }, 500); // slight delay helps autoplay
+        }
+    } catch (e) {
+        console.log("Welcome sound error:", e);
+    }
+};
+
+// ✅ Form Submit
+function handleSubmit(event) {
+    event.preventDefault();
+
+    const name = document.querySelector('input[name="name"]').value.trim();
+    const amount = document.querySelector('input[name="amount"]').value.trim();
+    const category = document.querySelector('select[name="category"]').value;
+
+    // ❌ If any field empty → do nothing
+    if (!name || !amount || !category) {
+        return;   // 👈 nothing happens
+    }
+
+    // ✅ If all filled → play sound + submit
+    playClick();
+
+    setTimeout(() => {
+        document.getElementById("expenseForm").submit();
+    }, 200);
+}
+
+// 📊 Chart Data from Flask
+const chartData = JSON.parse('{{ chart_data | tojson | safe }}');
+
+const labels = Object.keys(chartData);
+const data = Object.values(chartData);
+
+// 🎨 HARD MAP (make sure names EXACTLY match your categories)
+const backgroundColors = labels.map(label => {
+    if (label === "Food") return "#ff9800";
+    if (label === "Travel") return "#2196f3";
+    if (label === "Shopping") return "#e91e63";
+    if (label === "Entertainment") return "#9c27b0";
+    if (label === "Vehicles") return "#4caf50";
+    if (label === "Bills") return "#f44336";
+    if (label === "Other") return "#00e764";
+    return "#999"; // fallback
+});
+
+const ctx = document.getElementById('expenseChart');
+
+if (ctx && labels.length > 0) {
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors
+            }]
+        }
+    });
+}
+
+const select = document.getElementById("categorySelect");
+
+select.addEventListener("change", function () {
+    // remove all classes
+    select.className = "";
+
+    const value = this.value.toLowerCase();
+
+    if (value) {
+        select.classList.add(value);
+    } else {
+        select.classList.add("default");
+    }
+});
+
+const searchBox = document.getElementById("searchBox");
+const filterCategory = document.getElementById("filterCategory");
+
+function filterExpenses() {
+    const searchValue = searchBox.value.toLowerCase();
+    const selectedCategory = filterCategory.value;
+
+    document.querySelectorAll("ul li").forEach(li => {
+        const text = li.innerText.toLowerCase();
+        const category = li.dataset.category;
+
+        const matchSearch = text.includes(searchValue);
+        const matchCategory = !selectedCategory || category === selectedCategory;
+
+        li.style.display = (matchSearch && matchCategory) ? "block" : "none";
+    });
+}
+
+// 🔍 Live search
+searchBox.addEventListener("input", filterExpenses);
+
+// 🏷️ Category filter
+filterCategory.addEventListener("change", filterExpenses);
+
+
+</script>
+</html>

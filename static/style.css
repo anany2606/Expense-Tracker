@@ -1,0 +1,329 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    /* background: linear-gradient(135deg, #1f1c2c, #928dab); */
+    background: linear-gradient(rgba(0, 0, 0, 0.429), rgba(0,0,0,0.6)),
+                url("/static/back-expense.jpg") no-repeat center center/cover;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.welcome {
+    margin-bottom: 15px;
+    color: #00ffcc;
+    font-weight: 500;
+}
+/* Title */
+h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+h3{
+    font-size: 18px;
+    text-align: center;
+    justify-content: left;
+    padding: 10px;
+    color: #15ff00;
+    
+}
+/* Glass card */
+.container {
+    width: 1000px;
+    /* margin: 20px auto; */
+    padding: 18px;
+
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(15px);
+    
+
+    border-radius: 20px;
+    border: 1px solid rgba(129, 127, 127, 0.2);
+
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.385),
+        inset 0 0 10px rgba(85, 85, 85, 0.078);
+
+    /* max-height: 600px; */
+    /* overflow-y: auto; */
+
+    transition: all 0.3s ease;
+    
+}
+.container:hover {
+    /* transform: translateY(-5px); */
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+.chart {
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.222);
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+/* Inputs */
+input, select {
+    padding: 10px;
+    margin: 8px;
+    border: none;
+    border-radius: 8px;
+    width: 28%;
+    outline: none;
+}
+
+/* Button */
+button {
+    padding: 10px 15px;
+    /* background: #00a2ff; */
+    cursor: pointer;
+    transition: 0.3s;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #15ff00;
+    transform: scale(1.05);
+}
+
+/* Expense List */
+ul {
+    /* max-width: 900px; */
+    list-style: none;
+    
+    margin-top: 20px;
+    
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 10px; /* space between items */
+    padding: 0;
+    
+}
+
+li {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    list-style: none;
+    background: rgba(255,255,255,0.1);
+    min-width: 300px;
+    margin: 12px 5px;
+    padding: 15px;
+    border-radius: 12px;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;  /* stack content */
+    justify-content: space-between;
+
+    transition: 0.3s;
+}
+
+li:hover {
+    
+    background: rgba(66, 66, 66, 0.2);
+    transform: scale(1.02);
+}
+
+li strong {
+    font-size: 16px;
+}
+
+li span.amount {
+    font-weight: bold;
+    color: #00ffcc;
+}
+
+/* Delete button */
+a {
+    float: right;
+    /* justify-content: right; */
+    /* background-color: white; */
+    color: #ff4d4d;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+a:hover {
+    /* color: rgb(255, 255, 255); */
+    background-color: rgba(255, 0, 0, 0.567);
+    border-radius: 5px;
+}
+
+/* Total */
+.total {
+    margin-top: 15px;
+    font-size: 1.3rem;
+    color: #00ffcc;
+}
+
+/* Logout */
+.logout {
+    display: inline-block;
+    margin-bottom: 15px;
+    color: #fff;
+    text-decoration: none;
+}
+
+canvas {
+    max-width: 400px;
+    margin: 20px auto;
+    display: block;
+    color: white;
+}
+
+.card {
+    background: rgba(151, 151, 151, 0.1);
+    padding: 15px;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: 0.3s;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s forwards;
+}
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(135, 135, 135, 0.2);
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon {
+    font-size: 22px;
+}
+
+.amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ffcc;
+}
+
+:root {
+    --food: #ff9800;
+    --travel: #2196f3;
+    --shopping: #e91e63;
+    --entertainment: #9c27b0;
+    --vehicles: #4caf50;
+    --bills: #f44336;
+    --other: #00e764;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin: 5px;
+    padding: 2px;
+    background-color: #57960048;
+    min-width: 100%;
+    border-radius: 10px;
+}
+
+.filtercard {
+    display: flex;
+    /* background-color: #f44336; */
+    border-radius: 10px;
+    justify-content: right;
+}
+.food { border-left: 5px solid var(--food); }
+.travel { border-left: 5px solid var(--travel); }
+.shopping { border-left: 5px solid var(--shopping); }
+.entertainment { border-left: 5px solid var(--entertainment); }
+.vehicles { border-left: 5px solid var(--vehicles); }
+.bills { border-left: 5px solid var(--bills); }
+.other { border-left: 5px solid var(--other); }
+
+
+#categorySelect {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* Default */
+#categorySelect.default {
+    background: #eee;
+    color: #333;
+}
+
+/* Category colors */
+#categorySelect.food {
+    background: #ff9800;
+    color: white;
+}
+
+#categorySelect.travel {
+    background: #2196f3;
+    color: white;
+}
+
+#categorySelect.shopping {
+    background: #e91e63;
+    color: white;
+}
+
+#categorySelect.entertainment {
+    background: #9c27b0;
+    color: white;
+}
+
+#categorySelect.vehicles {
+    background: #4caf50;
+    color: white;
+}
+
+#categorySelect.bills {
+    background: #f44336;
+    color: white;
+}
+#categorySelect.other {
+    background: #00e764;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    ul {
+        grid-template-columns: 1fr;
+    }
+}
