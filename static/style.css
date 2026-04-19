@@ -18,17 +18,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    overflow-x: hidden;
 }
 
 .welcome {
     margin-bottom: 15px;
     color: #00ffcc;
     font-weight: 500;
+    text-align: center;
+    font-size: 16px;
 }
 /* Title */
 h1 {
     margin-bottom: 20px;
-    font-size: 2.5rem;
+    font-size: 22px;
+    text-align: center;
 }
 
 h3{
@@ -41,9 +45,14 @@ h3{
 }
 /* Glass card */
 .container {
-    width: 1000px;
+
+    width: 95%;
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 15px;
+    
     /* margin: 20px auto; */
-    padding: 18px;
+    
 
     background: rgba(255, 255, 255, 0);
     backdrop-filter: blur(15px);
@@ -67,6 +76,17 @@ h3{
     box-shadow: 
         0 12px 40px rgba(0, 0, 0, 0.4),
         inset 0 0 12px rgba(255, 255, 255, 0.08);
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+form input,
+form select {
+    flex: 1 1 100%;
 }
 
 .chart {
@@ -97,6 +117,7 @@ button {
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
+    width: 100%;
 }
 
 button:hover {
@@ -107,11 +128,11 @@ button:hover {
 /* Expense List */
 ul {
     /* max-width: 900px; */
+    display: grid;
+    gap: 12px;
     list-style: none;
     
-    margin-top: 20px;
-    
-    display: grid;
+    margin-top: 15px;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 10px; /* space between items */
     padding: 0;
@@ -186,11 +207,12 @@ canvas {
     margin: 20px auto;
     display: block;
     color: white;
+    width: 100% !important;
+    height: auto !important;
 }
 
 .card {
     background: rgba(151, 151, 151, 0.1);
-    padding: 15px;
     border-radius: 15px;
 
     display: flex;
@@ -202,6 +224,8 @@ canvas {
     opacity: 0;
     transform: translateY(20px);
     animation: fadeIn 0.5s forwards;
+    padding: 12px;
+    font-size: 14px;
 }
 @keyframes fadeIn {
     to {
@@ -210,6 +234,19 @@ canvas {
     }
 }
 
+/* Tablet */
+@media (max-width: 768px) {
+    ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    ul {
+        grid-template-columns: 1fr;
+    }
+}
 .card:hover {
     transform: translateY(-5px) scale(1.02);
     background: rgba(135, 135, 135, 0.2);
