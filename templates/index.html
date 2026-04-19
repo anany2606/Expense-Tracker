@@ -5,14 +5,14 @@
 </head>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <audio id="clickSound" preload="auto">
-    <source src="static/click.mp3" type="audio/mpeg">
+    <source src="{{ url_for('static', filename='click.mp3') }}" type="audio/mpeg">
 </audio>
 
 <audio id="deleteSound" preload="auto">
-    <source src="static/swoosh.mp3" type="audio/mpeg">
+    <source src="{{ url_for('static', filename='swoosh.mp3') }} " type="audio/mpeg">
 </audio>
 <audio id="welcomeSound" preload="auto">
-    <source src="static/welcome.mp3" type="audio/mpeg">
+    <source src="{{ url_for('static', filename='welcome.mp3') }} " type="audio/mpeg">
 </audio>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
