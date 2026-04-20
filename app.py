@@ -23,7 +23,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS expenses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
-            amount INTEGER,
+            amount REAL,   -- ✅ supports decimal
             category TEXT,
             date TEXT,
             user_id INTEGER
@@ -40,15 +40,15 @@ init_db()
 # ---------------- START ROUTE ----------------
 @app.route('/')
 def start():
-    return redirect('/login')
+    return render_template("welcome.html")
 
 
 # ---------------- SIGNUP ----------------
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
 
         try:
             conn = sqlite3.connect('expenses.db')
@@ -60,11 +60,23 @@ def signup():
             )
 
             conn.commit()
+
+            # ✅ Store success message in session
+            session['flash_message'] = "Account created successfully 🎉"
+
+            # ✅ Auto login
+            session['user_id'] = cursor.lastrowid
+            session['username'] = username
+            session['just_logged_in'] = True
+
+            conn.close()
+
+            return redirect('/home')
             conn.close()
 
             return redirect('/login?signup=success')
 
-        except:
+        except sqlite3.IntegrityError:
             return render_template("signup.html", error="Username already exists")
 
     return render_template("signup.html")
@@ -77,15 +89,17 @@ def login():
     success = request.args.get('signup')
 
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
 
         conn = sqlite3.connect('expenses.db')
         cursor = conn.cursor()
+
         cursor.execute(
             "SELECT * FROM users WHERE username=? AND password=?",
             (username, password)
         )
+
         user = cursor.fetchone()
         conn.close()
 
@@ -115,10 +129,21 @@ def home():
 
     user_id = session['user_id']
 
+    # -------- ADD EXPENSE --------
     if request.method == 'POST':
-        name = request.form['name']
-        amount = float(request.form['amount'])
-        category = request.form['category']
+        name = request.form.get('name')
+        amount = request.form.get('amount')
+        category = request.form.get('category')
+
+        # ✅ Validation
+        if not name or not amount or not category:
+            return redirect('/home')
+
+        try:
+            amount = float(amount)
+        except:
+            return redirect('/home')
+
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
         conn = sqlite3.connect('expenses.db')
@@ -134,6 +159,7 @@ def home():
 
         return redirect('/home')
 
+    # -------- FETCH EXPENSES --------
     conn = sqlite3.connect('expenses.db')
     cursor = conn.cursor()
 
@@ -145,19 +171,17 @@ def home():
     expenses = cursor.fetchall()
     conn.close()
 
-    total = sum([float(expense[2]) for expense in expenses])
-    
-    # 📊 Prepare chart data
+    # -------- TOTAL --------
+    total = round(sum(float(expense[2]) for expense in expenses), 2)
+
+    # -------- CHART DATA --------
     categories = {}
 
     for expense in expenses:
         cat = expense[3]
         amt = float(expense[2])
 
-        if cat in categories:
-                categories[cat] += amt
-        else:
-            categories[cat] = amt
+        categories[cat] = categories.get(cat, 0) + amt
 
     return render_template(
         "index.html",
@@ -165,7 +189,7 @@ def home():
         total=total,
         username=session.get('username'),
         play_sound=session.pop('just_logged_in', False),
-        chart_data=categories   # ✅ ADD THIS
+        chart_data=categories
     )
 
 
@@ -179,7 +203,8 @@ def delete(id):
     cursor = conn.cursor()
 
     cursor.execute(
-            "DELETE FROM expenses WHERE id=? AND user_id=?",(id, session['user_id'])
+        "DELETE FROM expenses WHERE id=? AND user_id=?",
+        (id, session['user_id'])
     )
 
     conn.commit()
@@ -191,4 +216,3 @@ def delete(id):
 # ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run()
-    

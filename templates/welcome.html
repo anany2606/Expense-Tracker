@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='welcome.css') }}">
+</head>
+<body>
+
+<div class="box">
+    <h1>💰 Expense Tracker</h1>
+
+    <p>Track your daily expenses easily</p>
+
+    <a href="{{ url_for('login') }}">🔐 Login</a>
+    <a href="{{ url_for('signup') }}">📝 Signup</a>
+</div>
+
+</body>
+</html>

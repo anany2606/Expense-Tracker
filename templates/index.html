@@ -18,6 +18,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 
+    {% if session.get('flash_message') %}
+    <div class="alert success">
+        {{ session.pop('flash_message') }}
+    </div>
+
+    {% endif %}
 <div class="container">
     <a href="/logout" class="logout">Logout 🙋🏻‍♀️</a>
 
@@ -106,6 +112,13 @@
 </body>
 <script>
 
+    setTimeout(() => {
+        const alertBox = document.querySelector('.alert');
+        if (alertBox) {
+            alertBox.style.display = 'none';
+        }
+    }, 3000); // disappears after 3 sec
+    
 // ✅ Click Sound
 function playClick() {
     const sound = document.getElementById("clickSound");

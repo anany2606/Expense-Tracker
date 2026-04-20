@@ -28,6 +28,26 @@ body {
     border-radius: 8px;
 }
 
+.alert {
+    margin-bottom: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    animation: fadeIn 0.5s ease;
+}
+
+.error {
+    background: rgba(255,0,0,0.2);
+    color: #ff4d4d;
+}
+
+.success {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 1px solid #00ff88;
+}
+
 .welcome {
     margin-bottom: 15px;
     color: #00ffcc;
@@ -76,6 +96,9 @@ h3{
     /* overflow-y: auto; */
 
     transition: all 0.3s ease;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     
 }
 .container:hover {
@@ -93,7 +116,7 @@ form {
 
 form input,
 form select {
-    flex: 1 1 100%;
+    flex: 1 1 90%;
 }
 
 .chart {
@@ -123,13 +146,15 @@ button {
     color: white;
     border: none;
     padding: 8px 12px;
+    margin: 8px;
     border-radius: 5px;
-    width: 100%;
+    width: 20%;
+    
 }
 
 button:hover {
     background: #15ff00;
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 /* Expense List */
@@ -186,11 +211,12 @@ a {
     color: #ff4d4d;
     text-decoration: none;
     font-size: 18px;
+    padding: 10px;
 }
 
 a:hover {
     /* color: rgb(255, 255, 255); */
-    background-color: rgba(255, 0, 0, 0.567);
+    background-color: rgba(0, 0, 0, 0.421);
     border-radius: 5px;
 }
 

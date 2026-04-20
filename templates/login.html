@@ -10,13 +10,18 @@
 <div class="container">
     <h1>🔐 LOGIN</h1>
 
-    {% if error %}
-        <p class="error">{{ error }}</p>
+    {% if success %}
+        <div class="alert success">Signup successful! Please login.</div>
     {% endif %}
 
-    {% if success %}
-        <p style="color:green;">Signup successful! Please login.</p>
+    {% if error %}
+        <div class="alert error">{{ error }}</div>
     {% endif %}
+
+    <p style="color: #aaa;">
+        Already have an account? Login below 👇
+    </p>
+    
     <form method="POST">
         <input type="text" name="username" placeholder="Username" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
