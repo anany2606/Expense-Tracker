@@ -21,6 +21,13 @@ body {
     overflow-x: hidden;
 }
 
+.success {
+    color: #00ff88;
+    background: rgba(0,255,136,0.1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
 .welcome {
     margin-bottom: 15px;
     color: #00ffcc;

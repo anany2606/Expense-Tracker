@@ -62,7 +62,7 @@ def signup():
             conn.commit()
             conn.close()
 
-            return redirect('/login')
+            return redirect('/login?signup=success')
 
         except:
             return render_template("signup.html", error="Username already exists")
@@ -73,18 +73,19 @@ def signup():
 # ---------------- LOGIN ----------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
+    success = request.args.get('signup')
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
         conn = sqlite3.connect('expenses.db')
         cursor = conn.cursor()
-
         cursor.execute(
             "SELECT * FROM users WHERE username=? AND password=?",
             (username, password)
         )
-
         user = cursor.fetchone()
         conn.close()
 
@@ -94,9 +95,9 @@ def login():
             session['just_logged_in'] = True
             return redirect('/home')
         else:
-            return render_template("login.html", error="Invalid username or password")
+            error = "Invalid username or password"
 
-    return render_template("login.html")
+    return render_template("login.html", error=error, success=success)
 
 
 # ---------------- LOGOUT ----------------
