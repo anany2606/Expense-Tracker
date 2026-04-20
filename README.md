@@ -21,6 +21,29 @@ A full-stack expense tracking application built using Flask.
 https://your-app.onrender.com
 
 ## Screenshots
+### Landing Page
+![Landing](screenshots/landing.png)
+
+### Login Page
+![Login](screenshots/login.png)
+
+### Signup Page
+![Signup](screenshots/signup.png)
+
+### Error message
+![Error](screenshots/error_login.png)
+
+### Main app
+![Main](screenshots/main.png)
+
+### Color Coded Categories
+![Color](screenshots/category.png)
+
+### Filters
+![Sort](screenshots/Filters.png)
+
+### Expense Chart
+![Chart](screenshots/pie_chart.png)
 
 
 ## 📂 Setup
