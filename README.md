@@ -18,7 +18,7 @@ A full-stack expense tracking application built using Flask.
 - Charts: Chart.js
 
 ## Live Demo
-https://your-app.onrender.com
+https://expense-tracker-pro-2pc4.onrender.com/
 
 ## Screenshots
 ### Landing Page
@@ -51,6 +51,7 @@ git clone https://github.com/yourusername/expense-tracker.git
 cd expense-tracker
 pip install -r requirements.txt
 python app.py
+
 
 Author 
 Ananya Pandit
