@@ -16,6 +16,8 @@
     <source src="{{ url_for('static', filename='welcome.mp3') }} " type="audio/mpeg">
 </audio>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<meta name="theme-color" content="#0f172a">
 <body>
 
     {% if session.get('flash_message') %}
@@ -262,6 +264,9 @@ searchBox.addEventListener("input", filterExpenses);
 // 🏷️ Category filter
 filterCategory.addEventListener("change", filterExpenses);
 
-
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/static/service-worker.js')
+    .then(() => console.log("Service Worker Registered"));
+}
 </script>
 </html>
